@@ -75,19 +75,27 @@ export default class App extends React.Component{
             <div className="app">
                 <h1>Classy Weather</h1>
 
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Search for location..."
-                        value={this.state.location}
-                        onChange={this.handleChange}
-                    />
-                </div>
-                <button onClick={this.fetchWeather}>Get weather</button>
+                <Input location={this.state.location} onChange={this.handleChange}/>
 
+                <button onClick={this.fetchWeather}>Get weather</button>
                 {this.state.isLoading && <p className="loader">Loading...</p>}
 
                 {this.state.weather.weathercode && <Weather weather={this.state.weather} location={this.state.displayLocation}/>}
+            </div>
+        )
+    }
+}
+
+class Input extends React.Component{
+    render() {
+        return(
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search for location..."
+                    value={this.props.location}
+                    onChange={this.props.onChange}
+                />
             </div>
         )
     }

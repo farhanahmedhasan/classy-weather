@@ -46,6 +46,8 @@ export default class App extends React.Component{
     }
 
     fetchWeather = async ()=> {
+        if (this.state.location.length < 2) return this.setState({weather: {}})
+
         this.setState({isLoading: true})
         try {
             // 1) Getting location (geocoding)
@@ -70,16 +72,24 @@ export default class App extends React.Component{
         }
     }
 
+    componentDidMount() {
+        this.setState({location: localStorage.getItem("location") || ""})
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.location !== this.state.location) {
+            this.fetchWeather()
+            localStorage.setItem("location", this.state.location)
+        }
+    }
+
     render() {
         return(
             <div className="app">
                 <h1>Classy Weather</h1>
-
                 <Input location={this.state.location} onChange={this.handleChange}/>
 
-                <button onClick={this.fetchWeather}>Get weather</button>
                 {this.state.isLoading && <p className="loader">Loading...</p>}
-
                 {this.state.weather.weathercode && <Weather weather={this.state.weather} location={this.state.displayLocation}/>}
             </div>
         )
